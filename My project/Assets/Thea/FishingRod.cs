@@ -13,40 +13,34 @@ public class FishingRod : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) // Left-click to cast
+        if (Input.GetMouseButtonDown(0)) 
         {
             TryCastLine();
         }
 
-        if (Input.GetMouseButtonDown(1) && isCasting) // Right-click to retract
+        if (Input.GetMouseButtonDown(1) && isCasting) 
         {
             RetractLine();
         }
 
         if (isCasting)
         {
-            UpdateLine(); // Continuously update the line while casting
+            UpdateLine(); 
         }
     }
 
     void TryCastLine()
     {
-        // Calculate the forward direction from the rod tip
         Vector3 castDirection = rodTip.forward;
         Vector3 potentialTarget = rodTip.position + castDirection * maxCastDistance;
 
-        // Raycast downwards from the potential target
         if (Physics.Raycast(potentialTarget, Vector3.down, out RaycastHit hit))
         {
             if (hit.collider.CompareTag(waterTag))
             {
-                castTarget = hit.point; // End the line exactly at the ground point
+                castTarget = hit.point; 
                 StartCasting();
             }
-        }
-        else
-        {
-            Debug.Log("No valid ground detected within range.");
         }
     }
 
@@ -65,9 +59,9 @@ public class FishingRod : MonoBehaviour
 
         for (int i = 0; i < lineSegments; i++)
         {
-            float t = (float)i / (lineSegments - 1); // Normalize between 0 and 1
-            Vector3 point = Vector3.Lerp(start, castTarget, t); // Linear interpolation
-            point.y -= Mathf.Sin(t * Mathf.PI) * direction.magnitude * 0.2f; // Add curve for gravity
+            float t = (float)i / (lineSegments - 1); 
+            Vector3 point = Vector3.Lerp(start, castTarget, t); 
+            point.y -= Mathf.Sin(t * Mathf.PI) * direction.magnitude * 0.2f; 
             lineRenderer.SetPosition(i, point);
         }
     }
