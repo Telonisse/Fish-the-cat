@@ -2,35 +2,74 @@ using UnityEngine;
 
 public class FishingRod : MonoBehaviour
 {
-    public LineRenderer lineRenderer;   
-    public Transform rodTip;           
-    public string waterTag = "Water"; 
-    public float maxCastDistance = 15f; 
-    public int lineSegments = 30;       
+    [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private Transform rodTip;
+    [SerializeField] private string waterTag = "Water";
+    [SerializeField] private float maxCastDistance = 15f;      
+    [SerializeField] private int lineSegments = 30;
+    [SerializeField] private MeshRenderer rodMeshRenderer;     
 
-    private bool isCasting = false;
-    private Vector3 castTarget;
+    private bool isCasting = false;          
+    private Vector3 castTarget;              
+    private bool isFishingRodActive = true;  
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0)) 
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ToggleFishingRod();
+        }
+
+        if (!isFishingRodActive) return; 
+
+        if (Input.GetMouseButtonDown(0))
         {
             TryCastLine();
         }
 
-        if (Input.GetMouseButtonDown(1) && isCasting) 
+        if (Input.GetMouseButtonDown(1) && isCasting)
         {
             RetractLine();
         }
 
         if (isCasting)
         {
-            UpdateLine(); 
+            UpdateLine();
         }
+    }
+
+    void ToggleFishingRod()
+    {
+        isFishingRodActive = !isFishingRodActive; 
+
+        if (rodMeshRenderer != null)
+        {
+            rodMeshRenderer.enabled = isFishingRodActive;
+        }
+
+        if (lineRenderer != null)
+        {
+            if (isFishingRodActive)
+            {
+                lineRenderer.gameObject.SetActive(true);
+            }
+            else
+            {
+                ResetLineRenderer(); 
+            }
+        }
+    }
+
+    void ResetLineRenderer()
+    {
+        lineRenderer.positionCount = 0;
+        isCasting = false;
     }
 
     void TryCastLine()
     {
+        if (!isFishingRodActive) return;
+
         Vector3 castDirection = rodTip.forward;
         Vector3 potentialTarget = rodTip.position + castDirection * maxCastDistance;
 
@@ -38,7 +77,7 @@ public class FishingRod : MonoBehaviour
         {
             if (hit.collider.CompareTag(waterTag))
             {
-                castTarget = hit.point; 
+                castTarget = hit.point;
                 StartCasting();
             }
         }
@@ -59,9 +98,9 @@ public class FishingRod : MonoBehaviour
 
         for (int i = 0; i < lineSegments; i++)
         {
-            float t = (float)i / (lineSegments - 1); 
-            Vector3 point = Vector3.Lerp(start, castTarget, t); 
-            point.y -= Mathf.Sin(t * Mathf.PI) * direction.magnitude * 0.2f; 
+            float t = (float)i / (lineSegments - 1);
+            Vector3 point = Vector3.Lerp(start, castTarget, t);
+            point.y -= Mathf.Sin(t * Mathf.PI) * direction.magnitude * 0.2f;
             lineRenderer.SetPosition(i, point);
         }
     }
