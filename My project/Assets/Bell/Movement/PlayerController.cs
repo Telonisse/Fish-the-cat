@@ -17,8 +17,11 @@ public class PlayerController : MonoBehaviour
 
     private bool grounded = false;
 
+    private Animator animator;
+
     private void Awake()
     {
+        animator = this.GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         playerActions = new PlayerInputs();
     }
@@ -44,6 +47,11 @@ public class PlayerController : MonoBehaviour
         }
 
         LookAt();
+    }
+
+    private void Update()
+    {
+        animator.SetFloat("Speed", rb.linearVelocity.magnitude / maxSpeed);
     }
 
     private void LookAt()
@@ -92,6 +100,7 @@ public class PlayerController : MonoBehaviour
     {
         if (grounded)
         {
+            animator.SetTrigger("Jump");
             forceDir += Vector3.up * jumpForce;
         }
     }

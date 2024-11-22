@@ -6,15 +6,14 @@ public class PlayerAnimations : MonoBehaviour
     private Rigidbody rb;
     [SerializeField] float maxSpeed= 5f;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        animator = this.GetComponentInChildren<Animator>();
+        rb = this.GetComponent<Rigidbody>();
     }
 
-    // Update is called once per frame
     void Update()
     {
-        
+        animator.SetFloat("Speed", rb.linearVelocity.magnitude / maxSpeed);
     }
 }
