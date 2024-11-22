@@ -7,7 +7,10 @@ public class FishingRod : MonoBehaviour
     [SerializeField] private string waterTag = "Water";
     [SerializeField] private float maxCastDistance = 15f;      
     [SerializeField] private int lineSegments = 30;
-    [SerializeField] private MeshRenderer rodMeshRenderer;     
+    [SerializeField] private MeshRenderer rodMeshRenderer;
+
+    [SerializeField] private GameObject bobberPrefab; 
+    private GameObject currentBobber;
 
     private bool isCasting = false;          
     private Vector3 castTarget;              
@@ -87,19 +90,38 @@ public class FishingRod : MonoBehaviour
     {
         isCasting = true;
         lineRenderer.enabled = true;
+
+        if (currentBobber == null && bobberPrefab != null)
+        {
+            currentBobber = Instantiate(bobberPrefab, castTarget, Quaternion.identity);
+            PositionBobber();
+        }
+    }
+
+    void PositionBobber()
+    {
+        if (currentBobber != null)
+        {
+            Vector3 position = castTarget;
+            position.y += 0.2f; 
+            currentBobber.transform.position = position;
+        }
     }
 
     void UpdateLine()
     {
+        if (currentBobber == null) return;
+
         lineRenderer.positionCount = lineSegments;
 
         Vector3 start = rodTip.position;
-        Vector3 direction = castTarget - start;
+        Vector3 end = currentBobber.transform.position;
+        Vector3 direction = end - start;
 
         for (int i = 0; i < lineSegments; i++)
         {
             float t = (float)i / (lineSegments - 1);
-            Vector3 point = Vector3.Lerp(start, castTarget, t);
+            Vector3 point = Vector3.Lerp(start, end, t);
             point.y -= Mathf.Sin(t * Mathf.PI) * direction.magnitude * 0.2f;
             lineRenderer.SetPosition(i, point);
         }
@@ -109,6 +131,12 @@ public class FishingRod : MonoBehaviour
     {
         isCasting = false;
         lineRenderer.enabled = false;
+
+        if (currentBobber != null)
+        {
+            Destroy(currentBobber);
+            currentBobber = null;
+        }
     }
 }
 
