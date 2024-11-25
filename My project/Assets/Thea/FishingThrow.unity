@@ -370,7 +370,7 @@ Transform:
   m_GameObject: {fileID: 675557379}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalPosition: {x: 0.73499995, y: -1.289, z: -0.039000034}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -648,7 +648,7 @@ Transform:
   m_GameObject: {fileID: 1546255937}
   serializedVersion: 2
   m_LocalRotation: {x: 0.44346178, y: -0, z: -0, w: 0.89629334}
-  m_LocalPosition: {x: 0.351, y: 0.37800002, z: 0.763}
+  m_LocalPosition: {x: 1.086, y: 0.589, z: 0.724}
   m_LocalScale: {x: 0.1, y: 0.8, z: 0.1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -672,7 +672,6 @@ MonoBehaviour:
   maxCastDistance: 10
   lineSegments: 20
   rodMeshRenderer: {fileID: 1546255941}
-  bobberPrefab: {fileID: 1049142094}
 --- !u!136 &1546255940
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -895,7 +894,7 @@ Transform:
   m_GameObject: {fileID: 1880796287}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.351, y: 0.85599995, z: 1.383}
+  m_LocalPosition: {x: 1.086, y: 1.0669999, z: 1.344}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

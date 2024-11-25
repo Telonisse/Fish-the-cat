@@ -1,40 +1,67 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class FishingRod : MonoBehaviour
 {
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Transform rodTip;
     [SerializeField] private string waterTag = "Water";
-    [SerializeField] private float maxCastDistance = 15f;      
+    [SerializeField] private float maxCastDistance = 15f;
     [SerializeField] private int lineSegments = 30;
     [SerializeField] private MeshRenderer rodMeshRenderer;
 
-    [SerializeField] private GameObject bobberPrefab; 
-    private GameObject currentBobber;
+    private bool isCasting = false;
+    private Vector3 castTarget;
+    private bool isFishingRodActive =false;
 
-    private bool isCasting = false;          
-    private Vector3 castTarget;              
-    private bool isFishingRodActive = true;  
+    private bool isLineCast = false;
+    private PlayerInputs playerActions;
+    private void Awake()
+    {
+        playerActions = new PlayerInputs();
+    }
+    private void OnEnable()
+    {
+        playerActions.Player.ToggleFishing.started += ToggleFishing;
+        playerActions.Player.Fish.started += Fish;
+        playerActions.Player.Enable();
+    }
+
+    private void OnDisable()
+    {
+        playerActions.Player.ToggleFishing.started -= ToggleFishing;
+        playerActions.Player.Fish.started -= Fish;
+        playerActions.Player.Disable();
+    }
+
+    private void ToggleFishing(InputAction.CallbackContext obj)
+    {
+        
+        ToggleFishingRod();
+        
+    }
+    private void Fish(InputAction.CallbackContext obj)
+    {
+
+        if (!isFishingRodActive) return;
+
+        if (!isLineCast)
+        {
+            TryCastLine();
+            isLineCast = true; 
+        }
+        else
+        {
+            if (isCasting)
+            {
+                RetractLine();
+                isLineCast = false; 
+            }
+        }
+    }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ToggleFishingRod();
-        }
-
-        if (!isFishingRodActive) return; 
-
-        if (Input.GetMouseButtonDown(0))
-        {
-            TryCastLine();
-        }
-
-        if (Input.GetMouseButtonDown(1) && isCasting)
-        {
-            RetractLine();
-        }
-
         if (isCasting)
         {
             UpdateLine();
@@ -43,23 +70,24 @@ public class FishingRod : MonoBehaviour
 
     void ToggleFishingRod()
     {
-        isFishingRodActive = !isFishingRodActive; 
+        isFishingRodActive = !isFishingRodActive;
 
         if (rodMeshRenderer != null)
         {
             rodMeshRenderer.enabled = isFishingRodActive;
         }
 
-        if (lineRenderer != null)
+        if (isFishingRodActive)
         {
-            if (isFishingRodActive)
-            {
-                lineRenderer.gameObject.SetActive(true);
-            }
-            else
-            {
-                ResetLineRenderer(); 
-            }
+            lineRenderer.enabled = false;
+            lineRenderer.positionCount = 0;
+            isCasting = false;
+            isLineCast = false;
+        }
+        else
+        {
+            ResetLineRenderer();
+            isLineCast = false;
         }
     }
 
@@ -90,38 +118,19 @@ public class FishingRod : MonoBehaviour
     {
         isCasting = true;
         lineRenderer.enabled = true;
-
-        if (currentBobber == null && bobberPrefab != null)
-        {
-            currentBobber = Instantiate(bobberPrefab, castTarget, Quaternion.identity);
-            PositionBobber();
-        }
-    }
-
-    void PositionBobber()
-    {
-        if (currentBobber != null)
-        {
-            Vector3 position = castTarget;
-            position.y += 0.2f; 
-            currentBobber.transform.position = position;
-        }
     }
 
     void UpdateLine()
     {
-        if (currentBobber == null) return;
-
         lineRenderer.positionCount = lineSegments;
 
         Vector3 start = rodTip.position;
-        Vector3 end = currentBobber.transform.position;
-        Vector3 direction = end - start;
+        Vector3 direction = castTarget - start;
 
         for (int i = 0; i < lineSegments; i++)
         {
             float t = (float)i / (lineSegments - 1);
-            Vector3 point = Vector3.Lerp(start, end, t);
+            Vector3 point = Vector3.Lerp(start, castTarget, t);
             point.y -= Mathf.Sin(t * Mathf.PI) * direction.magnitude * 0.2f;
             lineRenderer.SetPosition(i, point);
         }
@@ -131,12 +140,6 @@ public class FishingRod : MonoBehaviour
     {
         isCasting = false;
         lineRenderer.enabled = false;
-
-        if (currentBobber != null)
-        {
-            Destroy(currentBobber);
-            currentBobber = null;
-        }
     }
 }
 
