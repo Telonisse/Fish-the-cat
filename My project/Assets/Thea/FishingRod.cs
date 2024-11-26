@@ -9,17 +9,22 @@ public class FishingRod : MonoBehaviour
     [SerializeField] private float maxCastDistance = 15f;
     [SerializeField] private int lineSegments = 30;
     [SerializeField] private MeshRenderer rodMeshRenderer;
+    [SerializeField] private GameObject bobberPrefab;
+    [SerializeField] private GameObject collisionSegmentPrefab; 
 
+    private GameObject bobberInstance;
+    private GameObject[] collisionSegments;
     private bool isCasting = false;
     private Vector3 castTarget;
-    private bool isFishingRodActive =false;
-
+    private bool isFishingRodActive = false;
     private bool isLineCast = false;
     private PlayerInputs playerActions;
+
     private void Awake()
     {
         playerActions = new PlayerInputs();
     }
+
     private void OnEnable()
     {
         playerActions.Player.ToggleFishing.started += ToggleFishing;
@@ -36,26 +41,24 @@ public class FishingRod : MonoBehaviour
 
     private void ToggleFishing(InputAction.CallbackContext obj)
     {
-        
         ToggleFishingRod();
-        
     }
+
     private void Fish(InputAction.CallbackContext obj)
     {
-
         if (!isFishingRodActive) return;
 
         if (!isLineCast)
         {
             TryCastLine();
-            isLineCast = true; 
+            isLineCast = true;
         }
         else
         {
             if (isCasting)
             {
                 RetractLine();
-                isLineCast = false; 
+                isLineCast = false;
             }
         }
     }
@@ -65,6 +68,7 @@ public class FishingRod : MonoBehaviour
         if (isCasting)
         {
             UpdateLine();
+            UpdateCollisionSegments();
         }
     }
 
@@ -87,7 +91,11 @@ public class FishingRod : MonoBehaviour
         else
         {
             ResetLineRenderer();
-            isLineCast = false;
+            DestroyCollisionSegments();
+            if (bobberInstance != null)
+            {
+                Destroy(bobberInstance);
+            }
         }
     }
 
@@ -118,6 +126,18 @@ public class FishingRod : MonoBehaviour
     {
         isCasting = true;
         lineRenderer.enabled = true;
+        if (bobberInstance == null && bobberPrefab != null)
+        {
+            bobberInstance = Instantiate(bobberPrefab);
+        }
+
+        if (bobberInstance != null)
+        {
+            bobberInstance.SetActive(true);
+            bobberInstance.transform.position = castTarget;
+        }
+
+        CreateCollisionSegments();
     }
 
     void UpdateLine()
@@ -134,12 +154,67 @@ public class FishingRod : MonoBehaviour
             point.y -= Mathf.Sin(t * Mathf.PI) * direction.magnitude * 0.2f;
             lineRenderer.SetPosition(i, point);
         }
+
+        if (bobberInstance != null)
+        {
+            bobberInstance.transform.position = lineRenderer.GetPosition(lineSegments - 1);
+        }
+    }
+
+    void CreateCollisionSegments()
+    {
+        DestroyCollisionSegments();
+
+        collisionSegments = new GameObject[lineSegments - 1];
+        for (int i = 0; i < collisionSegments.Length; i++)
+        {
+            collisionSegments[i] = Instantiate(collisionSegmentPrefab);
+        }
+    }
+
+    void UpdateCollisionSegments()
+    {
+        if (collisionSegments == null) return;
+
+        for (int i = 0; i < collisionSegments.Length; i++)
+        {
+            Vector3 start = lineRenderer.GetPosition(i);
+            Vector3 end = lineRenderer.GetPosition(i + 1);
+
+            GameObject segment = collisionSegments[i];
+            segment.transform.position = (start + end) / 2;
+            segment.transform.LookAt(end);
+            float distance = Vector3.Distance(start, end);
+            segment.transform.localScale = new Vector3(0.1f, 0.1f, distance);
+        }
     }
 
     void RetractLine()
     {
         isCasting = false;
         lineRenderer.enabled = false;
+
+        if (bobberInstance != null)
+        {
+            bobberInstance.SetActive(false);
+        }
+
+        DestroyCollisionSegments();
+    }
+
+    void DestroyCollisionSegments()
+    {
+        if (collisionSegments == null) return;
+
+        foreach (var segment in collisionSegments)
+        {
+            if (segment != null)
+            {
+                Destroy(segment);
+            }
+        }
+
+        collisionSegments = null;
     }
 }
 
