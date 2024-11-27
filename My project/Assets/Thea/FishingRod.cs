@@ -9,11 +9,9 @@ public class FishingRod : MonoBehaviour
     [SerializeField] private float maxCastDistance = 15f;
     [SerializeField] private int lineSegments = 30;
     [SerializeField] private MeshRenderer rodMeshRenderer;
-    [SerializeField] private GameObject bobberPrefab;
-    [SerializeField] private GameObject collisionSegmentPrefab; 
+    [SerializeField] private GameObject bobberPrefab; 
 
     private GameObject bobberInstance;
-    private GameObject[] collisionSegments;
     private bool isCasting = false;
     private Vector3 castTarget;
     private bool isFishingRodActive = false;
@@ -46,12 +44,12 @@ public class FishingRod : MonoBehaviour
 
     private void Fish(InputAction.CallbackContext obj)
     {
+
         if (!isFishingRodActive) return;
 
         if (!isLineCast)
         {
             TryCastLine();
-            isLineCast = true;
         }
         else
         {
@@ -68,7 +66,6 @@ public class FishingRod : MonoBehaviour
         if (isCasting)
         {
             UpdateLine();
-            UpdateCollisionSegments();
         }
     }
 
@@ -91,7 +88,6 @@ public class FishingRod : MonoBehaviour
         else
         {
             ResetLineRenderer();
-            DestroyCollisionSegments();
             if (bobberInstance != null)
             {
                 Destroy(bobberInstance);
@@ -118,7 +114,16 @@ public class FishingRod : MonoBehaviour
             {
                 castTarget = hit.point;
                 StartCasting();
+                isLineCast = true; 
             }
+            else
+            {
+                isLineCast = false; 
+            }
+        }
+        else
+        {
+            isLineCast = false; 
         }
     }
 
@@ -126,6 +131,8 @@ public class FishingRod : MonoBehaviour
     {
         isCasting = true;
         lineRenderer.enabled = true;
+
+       
         if (bobberInstance == null && bobberPrefab != null)
         {
             bobberInstance = Instantiate(bobberPrefab);
@@ -136,8 +143,6 @@ public class FishingRod : MonoBehaviour
             bobberInstance.SetActive(true);
             bobberInstance.transform.position = castTarget;
         }
-
-        CreateCollisionSegments();
     }
 
     void UpdateLine()
@@ -155,37 +160,10 @@ public class FishingRod : MonoBehaviour
             lineRenderer.SetPosition(i, point);
         }
 
+       
         if (bobberInstance != null)
         {
             bobberInstance.transform.position = lineRenderer.GetPosition(lineSegments - 1);
-        }
-    }
-
-    void CreateCollisionSegments()
-    {
-        DestroyCollisionSegments();
-
-        collisionSegments = new GameObject[lineSegments - 1];
-        for (int i = 0; i < collisionSegments.Length; i++)
-        {
-            collisionSegments[i] = Instantiate(collisionSegmentPrefab);
-        }
-    }
-
-    void UpdateCollisionSegments()
-    {
-        if (collisionSegments == null) return;
-
-        for (int i = 0; i < collisionSegments.Length; i++)
-        {
-            Vector3 start = lineRenderer.GetPosition(i);
-            Vector3 end = lineRenderer.GetPosition(i + 1);
-
-            GameObject segment = collisionSegments[i];
-            segment.transform.position = (start + end) / 2;
-            segment.transform.LookAt(end);
-            float distance = Vector3.Distance(start, end);
-            segment.transform.localScale = new Vector3(0.1f, 0.1f, distance);
         }
     }
 
@@ -198,23 +176,6 @@ public class FishingRod : MonoBehaviour
         {
             bobberInstance.SetActive(false);
         }
-
-        DestroyCollisionSegments();
-    }
-
-    void DestroyCollisionSegments()
-    {
-        if (collisionSegments == null) return;
-
-        foreach (var segment in collisionSegments)
-        {
-            if (segment != null)
-            {
-                Destroy(segment);
-            }
-        }
-
-        collisionSegments = null;
     }
 }
 
