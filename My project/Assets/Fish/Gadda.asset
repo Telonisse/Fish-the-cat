@@ -1,0 +1,20 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4986fb0bf8e242448a2d7435d9ecbf2a, type: 3}
+  m_Name: Gadda
+  m_EditorClassIdentifier: 
+  fishName: Gadda
+  fishImage: {fileID: 0}
+  fishMovement: 4.16
+  fishSpeed: 2.27
+  probability: 78
+  fishDifficulty: 1
