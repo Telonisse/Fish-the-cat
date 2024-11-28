@@ -277,6 +277,7 @@ GameObject:
   - component: {fileID: 530111853}
   - component: {fileID: 530111852}
   - component: {fileID: 530111855}
+  - component: {fileID: 530111856}
   m_Layer: 4
   m_Name: Water (2)
   m_TagString: Water
@@ -314,7 +315,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -400,6 +401,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &530111856
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 530111850}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6873fc312e348604fa0f4fb6a0f5c15f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterSource: 0
 --- !u!1 &624413767
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,6 +427,7 @@ GameObject:
   - component: {fileID: 624413769}
   - component: {fileID: 624413768}
   - component: {fileID: 624413772}
+  - component: {fileID: 624413773}
   m_Layer: 4
   m_Name: Water
   m_TagString: Water
@@ -435,7 +450,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -536,6 +551,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &624413773
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 624413767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6873fc312e348604fa0f4fb6a0f5c15f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterSource: 0
 --- !u!1 &872039124
 GameObject:
   m_ObjectHideFlags: 0
@@ -549,6 +577,7 @@ GameObject:
   - component: {fileID: 872039127}
   - component: {fileID: 872039126}
   - component: {fileID: 872039129}
+  - component: {fileID: 872039130}
   m_Layer: 4
   m_Name: Water (3)
   m_TagString: Water
@@ -586,7 +615,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -672,6 +701,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &872039130
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 872039124}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6873fc312e348604fa0f4fb6a0f5c15f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterSource: 1
 --- !u!1 &1049142094 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1102980371317209162, guid: 43e02bff9c11b0a488281ee5be5bf0fe, type: 3}
@@ -690,6 +732,7 @@ GameObject:
   - component: {fileID: 1206377574}
   - component: {fileID: 1206377573}
   - component: {fileID: 1206377576}
+  - component: {fileID: 1206377577}
   m_Layer: 4
   m_Name: Water (1)
   m_TagString: Water
@@ -727,7 +770,7 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -813,6 +856,19 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &1206377577
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1206377571}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6873fc312e348604fa0f4fb6a0f5c15f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  waterSource: 0
 --- !u!1 &1520019533
 GameObject:
   m_ObjectHideFlags: 0
@@ -853,6 +909,58 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5938435424999948037, guid: 55c1f19a36805914dbbae167427cb78b, type: 3}
   m_PrefabInstance: {fileID: 2706280429082970796}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1661544051
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1661544053}
+  - component: {fileID: 1661544052}
+  m_Layer: 0
+  m_Name: FishingSystem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1661544052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661544051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6fd8a268460a7e14ca59d3717c6ccc39, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  OceanFishList:
+  - {fileID: 11400000, guid: 0706af0a8e00f2944bc67fe64f1bbdac, type: 2}
+  BayFishList: []
+  MangroveFishList: []
+  isThereABite: 0
+  minigame: {fileID: 0}
+  fishmovement: {fileID: 0}
+  isCasted: 0
+--- !u!4 &1661544053
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1661544051}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 2.0711918, y: -14.18284, z: -3.724164}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1759120841
 GameObject:
   m_ObjectHideFlags: 0
@@ -991,6 +1099,10 @@ PrefabInstance:
       propertyPath: bobberPrefab
       value: 
       objectReference: {fileID: 1049142094}
+    - target: {fileID: 27074560266354545, guid: 55c1f19a36805914dbbae167427cb78b, type: 3}
+      propertyPath: fishingSystem
+      value: 
+      objectReference: {fileID: 1661544052}
     - target: {fileID: 3798888286901636974, guid: 55c1f19a36805914dbbae167427cb78b, type: 3}
       propertyPath: m_Name
       value: FishingRod
@@ -1344,3 +1456,4 @@ SceneRoots:
   - {fileID: 9064496038014256419}
   - {fileID: 240257110}
   - {fileID: 6728346355131859528}
+  - {fileID: 1661544053}

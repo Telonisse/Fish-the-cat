@@ -9,7 +9,11 @@ public class FishingRod : MonoBehaviour
     [SerializeField] private float maxCastDistance = 15f;
     [SerializeField] private int lineSegments = 30;
     [SerializeField] private MeshRenderer rodMeshRenderer;
-    [SerializeField] private GameObject bobberPrefab; 
+    [SerializeField] private GameObject bobberPrefab;
+
+    // For connecting fish scripts 
+    [SerializeField] private FishingSystem fishingSystem; 
+    [SerializeField] private FishArea currentFishArea;    
 
     private GameObject bobberInstance;
     private bool isCasting = false;
@@ -40,6 +44,21 @@ public class FishingRod : MonoBehaviour
     private void ToggleFishing(InputAction.CallbackContext obj)
     {
         ToggleFishingRod();
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.TryGetComponent<FishArea>(out FishArea area))
+        {
+            currentFishArea = area;
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.TryGetComponent<FishArea>(out FishArea area) && currentFishArea == area)
+        {
+            currentFishArea = null;
+        }
     }
 
     private void Fish(InputAction.CallbackContext obj)
@@ -103,6 +122,7 @@ public class FishingRod : MonoBehaviour
 
     void TryCastLine()
     {
+
         if (!isFishingRodActive) return;
 
         Vector3 castDirection = rodTip.forward;
@@ -112,18 +132,27 @@ public class FishingRod : MonoBehaviour
         {
             if (hit.collider.CompareTag(waterTag))
             {
-                castTarget = hit.point;
-                StartCasting();
-                isLineCast = true; 
+                // checking for fish area script
+                if (hit.collider.TryGetComponent<FishArea>(out FishArea fishArea))
+                {
+                    castTarget = hit.point;
+                    StartCasting();
+                    FishingSystem.Instance.StartFishing(fishArea.waterSource); 
+                    Debug.Log($"Fishing in {fishArea.waterSource}");
+                }
+                else
+                {
+                    Debug.Log("not valid water");
+                }
             }
             else
             {
-                isLineCast = false; 
+                Debug.Log("You can only fish it water");
             }
         }
         else
         {
-            isLineCast = false; 
+            Debug.Log("nothing valid found");
         }
     }
 

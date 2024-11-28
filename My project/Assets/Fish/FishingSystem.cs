@@ -146,36 +146,81 @@ public static FishingSystem Instance { get; set; }
 
     }
 
+    internal void CatchFish(WaterSource waterSource)
+    {
+        FishData caughtFish = CalculateBite(waterSource);
+
+        if (caughtFish != null && caughtFish.fishName != "NoBite")
+        {
+            Debug.Log("You caught a: " + caughtFish.fishName);
+
+           //ShowCaughtFishUI(caughtFish);
+        }
+        else
+        {
+            Debug.Log("No fish took the bait!");
+        }
+    }
+
+    //private FishData CalculateBite(WaterSource waterSource)
+    //{
+    //    List<FishData> availableFish = GetAvailableFish(waterSource);
+
+    //    //total probability
+    //    float totalProbability = 0f;
+    //    foreach(FishData fish in availableFish)
+    //    {
+    //        totalProbability += fish.probability;
+    //    }
+
+    //    //Generates random number between 0 and total probability
+    //    int randomValue = UnityEngine.Random.Range(0, Mathf.FloorToInt(totalProbability) + 1);
+    //    Debug.Log("Random value is" + randomValue);
+
+    //    //loop through fish for probability
+    //    float cumulativeProbability = 0f;
+
+    //    foreach(FishData fish in availableFish)
+    //    {
+    //        cumulativeProbability += fish.probability;
+    //        if(randomValue <= cumulativeProbability)
+    //        {
+    //            return fish;
+    //        }
+    //    }
+
+    //    //säg walla
+    //    return null;
+      
+    //}
+
     private FishData CalculateBite(WaterSource waterSource)
     {
         List<FishData> availableFish = GetAvailableFish(waterSource);
+        if (availableFish == null || availableFish.Count == 0)
+        {
+            return null;
+        }
 
-        //total probability
         float totalProbability = 0f;
-        foreach(FishData fish in availableFish)
+        foreach (FishData fish in availableFish)
         {
             totalProbability += fish.probability;
         }
 
-        //Generates random number between 0 and total probability
         int randomValue = UnityEngine.Random.Range(0, Mathf.FloorToInt(totalProbability) + 1);
-        Debug.Log("Random value is" + randomValue);
-
-        //loop through fish for probability
         float cumulativeProbability = 0f;
 
-        foreach(FishData fish in availableFish)
+        foreach (FishData fish in availableFish)
         {
             cumulativeProbability += fish.probability;
-            if(randomValue <= cumulativeProbability)
+            if (randomValue <= cumulativeProbability)
             {
-                return fish;
+                return fish; 
             }
         }
 
-        //säg walla
-        return null;
-      
+        return null; // no fish
     }
 
     private List<FishData> GetAvailableFish(WaterSource waterSource)
