@@ -12,6 +12,11 @@ public class LightingManager : MonoBehaviour
     [Tooltip("Speed of day and night cycle. 1 is normal, 2 is half of normal, 0.5 is double of normal")]
     [SerializeField] private float timeSpeed;
 
+    //Rain
+    [SerializeField] int probabilityOfRain = 1;
+    [SerializeField] ParticleSystem rainParticle;
+    public bool newDay = false;
+
     private void Update()
     {
         if (preset == null)
@@ -27,6 +32,26 @@ public class LightingManager : MonoBehaviour
         else
         {
             UpdateLighting(timeOfDay / 24);
+        }
+
+        if (timeOfDay > 4 && timeOfDay < 18 && newDay == false)
+        {
+            newDay = true;
+            int random = Random.Range(1, 101);
+            if (probabilityOfRain <= random)
+            {
+                rainParticle.Play();
+                Debug.Log("Rain");
+            }
+            else
+            {
+                rainParticle.Stop();
+                Debug.Log("No rain");
+            }
+        }
+        else if (timeOfDay > 18 && newDay == true)
+        {
+            newDay = false;
         }
     }
     private void OnValidate()
