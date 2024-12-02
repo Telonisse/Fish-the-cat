@@ -3,6 +3,7 @@ using UnityEngine.InputSystem;
 
 public class FishingRod : MonoBehaviour
 {
+    // Fishingrod cached ref
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private Transform rodTip;
     [SerializeField] private string waterTag = "Water";
@@ -16,17 +17,21 @@ public class FishingRod : MonoBehaviour
     [SerializeField] private FishArea currentFishArea;    
 
     private GameObject bobberInstance;
-    private bool isCasting = false;
     private Vector3 castTarget;
+    private PlayerInputs playerActions;
+
+    // Bools for fishing 
+    private bool isCasting = false;
     private bool isFishingRodActive = false;
     private bool isLineCast = false;
-    private PlayerInputs playerActions;
+    
 
     private void Awake()
     {
         playerActions = new PlayerInputs();
     }
 
+    // Needs to be changed to other inputs or figure out what inputs for what 
     private void OnEnable()
     {
         playerActions.Player.ToggleFishing.started += ToggleFishing;
@@ -43,8 +48,27 @@ public class FishingRod : MonoBehaviour
 
     private void ToggleFishing(InputAction.CallbackContext obj)
     {
-        ToggleFishingRod();
+        ToggleFishingRod(); // Turn on fishingrod with E (probably this one stay)
     }
+    private void Fish(InputAction.CallbackContext obj) // this one is on left click maybe change/add a different input?
+    {
+        if (!isFishingRodActive) return; // if fishingrod not active return
+
+        if (!isLineCast)
+        {
+            TryCastLine(); // Trys to cast the line 
+        }
+        else
+        {
+            if (isCasting) // if youve pressed twice so isCasting is true it retracts line 
+            {
+                RetractLine();
+                isLineCast = false; // this bool needs to be false to be able to cast the line 
+            }
+        }
+    }
+
+    // Detects when fishing rod enters fish area and gives what fish are it is
     private void OnTriggerEnter(Collider other)
     {
         if (other.TryGetComponent<FishArea>(out FishArea area))
@@ -53,6 +77,7 @@ public class FishingRod : MonoBehaviour
         }
     }
 
+    // exits fish area and nulls the currentFishArea
     private void OnTriggerExit(Collider other)
     {
         if (other.TryGetComponent<FishArea>(out FishArea area) && currentFishArea == area)
@@ -61,34 +86,15 @@ public class FishingRod : MonoBehaviour
         }
     }
 
-    private void Fish(InputAction.CallbackContext obj)
-    {
-
-        if (!isFishingRodActive) return;
-
-        if (!isLineCast)
-        {
-            TryCastLine();
-        }
-        else
-        {
-            if (isCasting)
-            {
-                RetractLine();
-                isLineCast = false;
-            }
-        }
-    }
-
     void Update()
     {
         if (isCasting)
         {
-            UpdateLine();
+            UpdateLine(); // visual for line 
         }
     }
 
-    void ToggleFishingRod()
+    void ToggleFishingRod() // pressed E comes here to turn on and off fishingrod
     {
         isFishingRodActive = !isFishingRodActive;
 
@@ -114,30 +120,29 @@ public class FishingRod : MonoBehaviour
         }
     }
 
-    void ResetLineRenderer()
+    void ResetLineRenderer() 
     {
         lineRenderer.positionCount = 0;
         isCasting = false;
     }
 
-    void TryCastLine()
+    void TryCastLine() // tries to cast line into water 
     {
-
         if (!isFishingRodActive) return;
 
-        Vector3 castDirection = rodTip.forward;
+        Vector3 castDirection = rodTip.forward; // direction
         Vector3 potentialTarget = rodTip.position + castDirection * maxCastDistance;
 
         if (Physics.Raycast(potentialTarget, Vector3.down, out RaycastHit hit))
         {
             if (hit.collider.CompareTag(waterTag))
             {
-                // checking for fish area script
+                // check what fish area it is 
                 if (hit.collider.TryGetComponent<FishArea>(out FishArea fishArea))
                 {
                     castTarget = hit.point;
                     StartCasting();
-                    FishingSystem.Instance.StartFishing(fishArea.waterSource); 
+                    FishingSystem.Instance.StartFishing(fishArea.waterSource); // ref to startfishing in fishing system in correct fish area 
                     Debug.Log($"Fishing in {fishArea.waterSource}");
                 }
                 else
@@ -156,12 +161,12 @@ public class FishingRod : MonoBehaviour
         }
     }
 
-    void StartCasting()
+    void StartCasting() 
     {
         isCasting = true;
         lineRenderer.enabled = true;
 
-       
+       // turn on bobbler at correct pos 
         if (bobberInstance == null && bobberPrefab != null)
         {
             bobberInstance = Instantiate(bobberPrefab);
@@ -174,7 +179,7 @@ public class FishingRod : MonoBehaviour
         }
     }
 
-    void UpdateLine()
+    void UpdateLine() // fishing lines curve shit dont look
     {
         lineRenderer.positionCount = lineSegments;
 
@@ -192,11 +197,11 @@ public class FishingRod : MonoBehaviour
        
         if (bobberInstance != null)
         {
-            bobberInstance.transform.position = lineRenderer.GetPosition(lineSegments - 1);
+            bobberInstance.transform.position = lineRenderer.GetPosition(lineSegments - 1); // bobbler at end of line 
         }
     }
 
-    void RetractLine()
+    void RetractLine() // hides bobbler and retracts the line 
     {
         isCasting = false;
         lineRenderer.enabled = false;
