@@ -15,7 +15,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] Camera cam;
 
-    private bool grounded = false;
+    public bool grounded = false;
 
     private Animator animator;
 
@@ -106,6 +106,7 @@ public class PlayerController : MonoBehaviour
     }
     private void OnTriggerStay(Collider other)
     {
+        Debug.Log("Touched " + other.tag);
         if (other.transform.tag == "Ground")
         {
             grounded = true;

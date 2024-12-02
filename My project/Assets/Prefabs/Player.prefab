@@ -517,6 +517,7 @@ MonoBehaviour:
   jumpForce: 5
   maxSpeed: 5
   cam: {fileID: 4809258756952491351}
+  grounded: 0
 --- !u!65 &4561855553336795547
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -536,8 +537,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 1, y: 0.2, z: 1}
-  m_Center: {x: 0, y: -1.2, z: 0}
+  m_Size: {x: 0.4, y: 0.5, z: 0.4}
+  m_Center: {x: 0, y: -1.25, z: 0}
 --- !u!1 &5961672757690897086
 GameObject:
   m_ObjectHideFlags: 0
