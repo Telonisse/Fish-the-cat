@@ -29,7 +29,7 @@ public static FishingSystem Instance { get; set; }
     public List<FishData> BayFishList;
     public List<FishData> MangroveFishList;
 
-    public bool isThereABite;
+    public bool isThereABite; 
     bool hasPulled;
 
     public static event Action OnFishingEnd;
@@ -52,12 +52,12 @@ public static FishingSystem Instance { get; set; }
         StartCoroutine(FishingCoroutine(waterSource));
     }
 
-    IEnumerator FishingCoroutine(WaterSource waterSource)
+    IEnumerator FishingCoroutine(WaterSource waterSource) // Starts fishing for specfic water 
     {
-        yield return new WaitForSeconds(3f);
-        FishData fish = CalculateBite(waterSource);
+        yield return new WaitForSeconds(3f); // delay for fishing make it random?
+        FishData fish = CalculateBite(waterSource); // what water we're in 
 
-        if(fish.fishName == "NoBite" )
+        if(fish.fishName == "NoBite" ) // no fish but why?, wait longer? 
         {
             Debug.Log("False Fish");
             EndFishing();
@@ -65,18 +65,18 @@ public static FishingSystem Instance { get; set; }
         else
         {
             Debug.Log(fish.fishName + "Is Biting");
-            StartCoroutine(FishHooked(fish));
+            StartCoroutine(FishHooked(fish)); // handle fish being hooked 
         }
     }
 
-    void StartFishingMini(WaterSource source)
+    void StartFishingMini(WaterSource source) // user input for fishing ( alot needs to be changed 
     {
-
+        // needs to be change to new input system and new inputs conflicts with fishingrod
 
         if (Input.GetMouseButton(0) && !isCasted)
         {
             //hämtar vilket vatten det är i start
-            FishingSystem.Instance.StartFishing(source);
+            FishingSystem.Instance.StartFishing(source); // starts fishing 
             isCasted = true;
 
         }
@@ -85,7 +85,8 @@ public static FishingSystem Instance { get; set; }
         {
             //hämtar vilket vatten det är i start
             //FishingSystem.Instance.StartFishing(source);
-            FishingSystem.Instance.PlayerFishing();
+            FishingSystem.Instance.PlayerFishing(); // player pulling line?
+            
 
         }
 
@@ -96,7 +97,7 @@ public static FishingSystem Instance { get; set; }
         FishingSystem.Instance.PlayerFishing(); //<<------ triggar data till minigame
         //pause = false;
 
-        if (FishingSystem.Instance.isThereABite)
+        if (FishingSystem.Instance.isThereABite) // trigger if theres a bite 
         {
             //alert
             //baitReference.transform.Find("Alert").gameObject.SetActive(true);
@@ -110,13 +111,13 @@ public static FishingSystem Instance { get; set; }
         isThereABite = true;
 
         //utropstecekn om att den är på kroken men spelaren har it reagerat än
-        while (!hasPulled)
+        while (!hasPulled) // waiting for player to pull fishing line 
         {
             yield return null;
         }
 
         Debug.Log("Start MiniGame");
-        fishBiting = fish;
+        fishBiting = fish; // store data 
         StartMiniGame();
 
     }
@@ -124,16 +125,16 @@ public static FishingSystem Instance { get; set; }
     private void StartMiniGame()
     {
         //minigame.SetActive(true);
-        Debug.Log("Starting MiniGame");
+        Debug.Log("Starting MiniGame"); // might just be catch fish thing for now you catched it here
         //fishmovement.SetDifficulty(fishBiting);
     }
 
     public void PlayerFishing()
     {
-        hasPulled = true;
+        hasPulled = true; 
     }
 
-    private void EndFishing()
+    private void EndFishing() // resets variables 
     {
         isThereABite = false;
         hasPulled = false;
@@ -146,7 +147,7 @@ public static FishingSystem Instance { get; set; }
 
     }
 
-    internal void CatchFish(WaterSource waterSource)
+    internal void CatchFish(WaterSource waterSource) // simulates catching fish
     {
         FishData caughtFish = CalculateBite(waterSource);
 
@@ -154,7 +155,7 @@ public static FishingSystem Instance { get; set; }
         {
             Debug.Log("You caught a: " + caughtFish.fishName);
 
-           //ShowCaughtFishUI(caughtFish);
+            //ShowCaughtFishUI(caughtFish);
         }
         else
         {
@@ -191,12 +192,12 @@ public static FishingSystem Instance { get; set; }
 
     //    //säg walla
     //    return null;
-      
+
     //}
 
-    private FishData CalculateBite(WaterSource waterSource)
+    private FishData CalculateBite(WaterSource waterSource) // gets what fish if any takes the bite 
     {
-        List<FishData> availableFish = GetAvailableFish(waterSource);
+        List<FishData> availableFish = GetAvailableFish(waterSource); // gets list for water source 
         if (availableFish == null || availableFish.Count == 0)
         {
             return null;
@@ -208,6 +209,7 @@ public static FishingSystem Instance { get; set; }
             totalProbability += fish.probability;
         }
 
+        // random number for random fish 
         int randomValue = UnityEngine.Random.Range(0, Mathf.FloorToInt(totalProbability) + 1);
         float cumulativeProbability = 0f;
 
@@ -216,14 +218,14 @@ public static FishingSystem Instance { get; set; }
             cumulativeProbability += fish.probability;
             if (randomValue <= cumulativeProbability)
             {
-                return fish; 
+                return fish; // gets the fish that matches the random value 
             }
         }
 
         return null; // no fish
     }
 
-    private List<FishData> GetAvailableFish(WaterSource waterSource)
+    private List<FishData> GetAvailableFish(WaterSource waterSource) // list based on water source 
     {
         switch(waterSource)
         {
@@ -239,7 +241,7 @@ public static FishingSystem Instance { get; set; }
         }
     }
     
-    internal void EndMinigame(bool sucess)
+    internal void EndMinigame(bool sucess) // ends minigame, idk about it delete?
     {
         minigame.gameObject.SetActive(false);
 
