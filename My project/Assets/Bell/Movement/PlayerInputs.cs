@@ -80,6 +80,15 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Retract"",
+                    ""type"": ""Button"",
+                    ""id"": ""1f10e265-6900-41c6-abbd-c92367599839"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -258,6 +267,17 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
                     ""action"": ""Fish"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""9cdd96fd-6388-4b3e-a101-f1edc35d9994"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": "";Keyboard and mouse"",
+                    ""action"": ""Retract"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -300,6 +320,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         m_Player_Zoom = m_Player.FindAction("Zoom", throwIfNotFound: true);
         m_Player_ToggleFishing = m_Player.FindAction("ToggleFishing", throwIfNotFound: true);
         m_Player_Fish = m_Player.FindAction("Fish", throwIfNotFound: true);
+        m_Player_Retract = m_Player.FindAction("Retract", throwIfNotFound: true);
     }
 
     ~@PlayerInputs()
@@ -372,6 +393,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
     private readonly InputAction m_Player_Zoom;
     private readonly InputAction m_Player_ToggleFishing;
     private readonly InputAction m_Player_Fish;
+    private readonly InputAction m_Player_Retract;
     public struct PlayerActions
     {
         private @PlayerInputs m_Wrapper;
@@ -382,6 +404,7 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         public InputAction @Zoom => m_Wrapper.m_Player_Zoom;
         public InputAction @ToggleFishing => m_Wrapper.m_Player_ToggleFishing;
         public InputAction @Fish => m_Wrapper.m_Player_Fish;
+        public InputAction @Retract => m_Wrapper.m_Player_Retract;
         public InputActionMap Get() { return m_Wrapper.m_Player; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -409,6 +432,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Fish.started += instance.OnFish;
             @Fish.performed += instance.OnFish;
             @Fish.canceled += instance.OnFish;
+            @Retract.started += instance.OnRetract;
+            @Retract.performed += instance.OnRetract;
+            @Retract.canceled += instance.OnRetract;
         }
 
         private void UnregisterCallbacks(IPlayerActions instance)
@@ -431,6 +457,9 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
             @Fish.started -= instance.OnFish;
             @Fish.performed -= instance.OnFish;
             @Fish.canceled -= instance.OnFish;
+            @Retract.started -= instance.OnRetract;
+            @Retract.performed -= instance.OnRetract;
+            @Retract.canceled -= instance.OnRetract;
         }
 
         public void RemoveCallbacks(IPlayerActions instance)
@@ -474,5 +503,6 @@ public partial class @PlayerInputs: IInputActionCollection2, IDisposable
         void OnZoom(InputAction.CallbackContext context);
         void OnToggleFishing(InputAction.CallbackContext context);
         void OnFish(InputAction.CallbackContext context);
+        void OnRetract(InputAction.CallbackContext context);
     }
 }

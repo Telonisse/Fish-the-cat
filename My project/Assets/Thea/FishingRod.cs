@@ -1,3 +1,5 @@
+using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -36,6 +38,7 @@ public class FishingRod : MonoBehaviour
     {
         playerActions.Player.ToggleFishing.started += ToggleFishing;
         playerActions.Player.Fish.started += Fish;
+        playerActions.Player.Retract.started += Retract;
         playerActions.Player.Enable();
     }
 
@@ -43,7 +46,19 @@ public class FishingRod : MonoBehaviour
     {
         playerActions.Player.ToggleFishing.started -= ToggleFishing;
         playerActions.Player.Fish.started -= Fish;
+        playerActions.Player.Retract.started += Retract;
         playerActions.Player.Disable();
+    }
+
+    private void Retract(InputAction.CallbackContext context) // right click
+    {
+        if (!isFishingRodActive) return;
+
+        if (isCasting) // checks if youve casted the line 
+        {
+            RetractLine();
+            isLineCast = false; // this bool needs to be false to be able to cast the line 
+        }
     }
 
     private void ToggleFishing(InputAction.CallbackContext obj)
@@ -62,11 +77,12 @@ public class FishingRod : MonoBehaviour
         {
             if (isCasting) // if youve pressed twice so isCasting is true it retracts line 
             {
-                RetractLine();
-                isLineCast = false; // this bool needs to be false to be able to cast the line 
+                //RetractLine();
+               // isLineCast = false; // this bool needs to be false to be able to cast the line 
             }
         }
     }
+   
 
     // Detects when fishing rod enters fish area and gives what fish are it is
     private void OnTriggerEnter(Collider other)
