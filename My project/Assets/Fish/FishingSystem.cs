@@ -11,11 +11,11 @@ public enum WaterSource
 }
 public class FishingSystem : MonoBehaviour
 {
-public static FishingSystem Instance { get; set; }
+    public static FishingSystem Instance { get; set; }
 
     private void Awake()
     {
-        if(Instance != null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(gameObject);
         }
@@ -29,7 +29,7 @@ public static FishingSystem Instance { get; set; }
     public List<FishData> BayFishList;
     public List<FishData> MangroveFishList;
 
-    public bool isThereABite; 
+    public bool isThereABite;
     bool hasPulled;
 
     public static event Action OnFishingEnd;
@@ -44,7 +44,7 @@ public static FishingSystem Instance { get; set; }
 
     private void Update()
     {
-        StartFishingMini(WaterSource.Ocean);    
+        StartFishingMini(WaterSource.Ocean);
     }
 
     internal void StartFishing(WaterSource waterSource)
@@ -57,7 +57,7 @@ public static FishingSystem Instance { get; set; }
         yield return new WaitForSeconds(3f); // delay for fishing make it random?
         FishData fish = CalculateBite(waterSource); // what water we're in 
 
-        if(fish.fishName == "NoBite" ) // no fish but why?, wait longer? 
+        if (fish.fishName == "NoBite") // no fish but why?, wait longer? 
         {
             Debug.Log("False Fish");
             EndFishing();
@@ -69,7 +69,7 @@ public static FishingSystem Instance { get; set; }
         }
     }
 
-    void StartFishingMini(WaterSource source) // user input for fishing ( alot needs to be changed 
+    void StartFishingMini(WaterSource source) // user input for fishing ( alot needs to be changed here it doesnt make sense )
     {
         // needs to be change to new input system and new inputs conflicts with fishingrod
 
@@ -86,7 +86,7 @@ public static FishingSystem Instance { get; set; }
             //hämtar vilket vatten det är i start
             //FishingSystem.Instance.StartFishing(source);
             FishingSystem.Instance.PlayerFishing(); // player pulling line?
-            
+
 
         }
 
@@ -131,7 +131,7 @@ public static FishingSystem Instance { get; set; }
 
     public void PlayerFishing()
     {
-        hasPulled = true; 
+        hasPulled = true;
     }
 
     private void EndFishing() // resets variables 
@@ -227,7 +227,7 @@ public static FishingSystem Instance { get; set; }
 
     private List<FishData> GetAvailableFish(WaterSource waterSource) // list based on water source 
     {
-        switch(waterSource)
+        switch (waterSource)
         {
             case WaterSource.Ocean:
                 return OceanFishList;
@@ -236,16 +236,16 @@ public static FishingSystem Instance { get; set; }
             case WaterSource.Mangrove:
                 return MangroveFishList;
 
-                default:
+            default:
                 return null;
         }
     }
-    
+
     internal void EndMinigame(bool sucess) // ends minigame, idk about it delete?
     {
         minigame.gameObject.SetActive(false);
 
-        if(sucess)
+        if (sucess)
         {
 
             Debug.Log("Fish Caught" + fishBiting.fishName); //<-- testa koppla detta till UI, ifall funkar gör så med resterande
@@ -257,3 +257,5 @@ public static FishingSystem Instance { get; set; }
         }
     }
 }
+
+

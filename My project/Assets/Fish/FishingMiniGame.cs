@@ -161,11 +161,11 @@ public class FishingMiniGame : MonoBehaviour
             //FishingSystem.Instance.PlayerFishing(); <<------ triggar data till minigame
             //pause = false;
 
-        if (FishingSystem.Instance.isThereABite)
-        {
-            //alert
-            baitReference.transform.Find("Alert").gameObject.SetActive(true);  
-        }
+        //if (FishingSystem.Instance.isThereABite)
+        //{
+        //    //alert
+        //    baitReference.transform.Find("Alert").gameObject.SetActive(true);  
+        //}
 
     }
     void ProgressCheck()
@@ -205,7 +205,7 @@ public class FishingMiniGame : MonoBehaviour
     void Win()
     {
 
-        FishingSystem.Instance.EndMinigame(true); //UI Popup kopplas i fishingsystem (kanske)
+       // FishingSystem.Instance.EndMinigame(true); //UI Popup kopplas i fishingsystem (kanske)
 
         pause = true;
         Debug.Log("You Catched Fish!");
@@ -216,7 +216,7 @@ public class FishingMiniGame : MonoBehaviour
 
     void Lose()
     {
-        FishingSystem.Instance.EndMinigame(false);
+       // FishingSystem.Instance.EndMinigame(false);
 
         pause = true;
         Debug.Log("Womp Womp, You Lost The Fish");
@@ -226,12 +226,12 @@ public class FishingMiniGame : MonoBehaviour
 
     private void OnEnable()
     {
-        FishingSystem.OnFishingEnd += HandleFishinEnd;
+       // FishingSystem.OnFishingEnd += HandleFishinEnd;
     }
 
     private void OnDestroy()
     {
-        FishingSystem.OnFishingEnd -= HandleFishinEnd;
+        //FishingSystem.OnFishingEnd -= HandleFishinEnd;
     }
 
     public void HandleFishinEnd()

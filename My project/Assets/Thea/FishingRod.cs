@@ -75,10 +75,10 @@ public class FishingRod : MonoBehaviour
         }
         else
         {
-            if (isCasting) // if youve pressed twice so isCasting is true it retracts line 
+            if (isCasting) // If the line is already cast and the player presses again
             {
-                //RetractLine();
-               // isLineCast = false; // this bool needs to be false to be able to cast the line 
+                // Start fishing logic here
+                FishingSystem.Instance.StartFishing(currentFishArea.waterSource);
             }
         }
     }
