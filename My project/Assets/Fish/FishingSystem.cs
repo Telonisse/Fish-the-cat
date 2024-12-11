@@ -105,7 +105,7 @@ public class FishingSystem : MonoBehaviour
 
     }
 
-    public IEnumerator FishHooked(FishData fish)
+    IEnumerator FishHooked(FishData fish)
     {
         //har nappat
         isThereABite = true;
