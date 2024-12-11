@@ -105,10 +105,12 @@ public class FishingSystem : MonoBehaviour
 
     }
 
-    IEnumerator FishHooked(FishData fish)
+    public IEnumerator FishHooked(FishData fish)
     {
         //har nappat
         isThereABite = true;
+
+        
 
         //utropstecekn om att den är på kroken men spelaren har it reagerat än
         while (!hasPulled) // waiting for player to pull fishing line 
