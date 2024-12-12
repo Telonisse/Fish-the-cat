@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public enum WaterSource
@@ -30,7 +31,7 @@ public class FishingSystem : MonoBehaviour
     public List<FishData> MangroveFishList;
 
     public bool isThereABite;
-    bool hasPulled;
+    bool hasPulled = false;
 
     public static event Action OnFishingEnd;
 
@@ -94,7 +95,7 @@ public class FishingSystem : MonoBehaviour
         //if(isCasted && input.getmousebutton(0) && fishingsystem.instance.isthereabite)
 
         //Fishingame active ^^^ den övre ska trigga den undre
-        FishingSystem.Instance.PlayerFishing(); //<<------ triggar data till minigame
+        // FishingSystem.Instance.PlayerFishing(); //<<------ triggar data till minigame
         //pause = false;
 
         if (FishingSystem.Instance.isThereABite) // trigger if theres a bite 
@@ -107,20 +108,55 @@ public class FishingSystem : MonoBehaviour
 
     IEnumerator FishHooked(FishData fish)
     {
-        //har nappat
-        isThereABite = true;
+        isThereABite = true; // Fish is on the hook
+        Debug.Log("A fish is biting!");
 
-        
+        // Wait for player to react
+        float pullTimeout = 5f; // Time allowed for the player to pull the line
+        float elapsedTime = 0f;
+        hasPulled = false;
 
-        //utropstecekn om att den är på kroken men spelaren har it reagerat än
-        while (!hasPulled) // waiting for player to pull fishing line 
+        while (!hasPulled && elapsedTime < pullTimeout)
         {
+            elapsedTime += Time.deltaTime;
             yield return null;
         }
 
-        Debug.Log("Start MiniGame");
-        fishBiting = fish; // store data 
-        StartMiniGame();
+        if (hasPulled)
+        {
+            Debug.Log("You caught the fish: " + fish.fishName);
+            fishBiting = fish;
+            //StartMiniGame(); 
+        }
+        else
+        {
+            Debug.Log("The fish got away!");
+            EndFishing(); // Reset states if the player fails to pull in time
+        }
+
+
+
+
+        ////har nappat
+        //isThereABite = true;
+
+   
+
+        ////utropstecekn om att den är på kroken men spelaren har it reagerat än
+        //while (!hasPulled) // waiting for player to pull fishing line 
+        //{
+        //    yield return null;
+        //}
+        
+        //if (hasPulled == true)
+        //{
+        //    Debug.Log(fish);
+        //}
+
+        
+        //// Debug.Log("Start MiniGame");
+        // fishBiting = fish; // store data 
+        ////StartMiniGame();
 
     }
 
@@ -133,7 +169,14 @@ public class FishingSystem : MonoBehaviour
 
     public void PlayerFishing()
     {
-        hasPulled = true;
+        if (isThereABite) // Ensure this only triggers when a fish is on the hook
+        {
+            hasPulled = true;
+        }
+        else
+        {
+            Debug.Log("There's no fish biting yet!");
+        }
     }
 
     private void EndFishing() // resets variables 

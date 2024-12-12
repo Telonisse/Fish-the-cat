@@ -72,16 +72,10 @@ public class FishingRod : MonoBehaviour
         if (!isLineCast)
         {
             TryCastLine(); // Trys to cast the line 
-            FishingSystem.Instance.StartFishing(currentFishArea.waterSource);
         }
-        else
+        else if (FishingSystem.Instance.isThereABite)
         {
-            if (isCasting) // If the line is already cast and the player presses again
-            {
-                // Start fishing logic here
-                //FishingSystem.Instance.StartFishing(currentFishArea.waterSource);
-                // here try to catch fish doesnt fucking exists stupid ass mf 
-            }
+            FishingSystem.Instance.PlayerFishing();
         }
     }
    
