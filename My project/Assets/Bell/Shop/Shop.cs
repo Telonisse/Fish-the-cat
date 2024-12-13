@@ -6,7 +6,7 @@ public class Shop : MonoBehaviour
 {
     [SerializeField] bool playerIsIn;
     private PlayerInputs playerActions;
-
+    [SerializeField] string shopText;
     private void Awake()
     {
         playerActions = new PlayerInputs();
@@ -49,12 +49,13 @@ public class Shop : MonoBehaviour
             if (Time.timeScale == 1)
             {
                 //call pause in another script??
-                Time.timeScale = 0;
+                //Time.timeScale = 0;
+                FindFirstObjectByType<DialogueSystem>().StartText(shopText);
             }
             else if (Time.timeScale == 0)
             {
                 //call play in another script??
-                Time.timeScale = 1;
+                //Time.timeScale = 1;
             }
         }
     }

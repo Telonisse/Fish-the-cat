@@ -1,16 +1,28 @@
 using UnityEngine;
+using TMPro;
+using System.Collections;
 
 public class DialogueSystem : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    [SerializeField] TextMeshProUGUI text;
+    [SerializeField] GameObject textObject;
+    [SerializeField] float time;
+
+    public void StartText(string dialougeText)
     {
-        
+        textObject.SetActive(true);
+        StartCoroutine(PlayText(dialougeText));
+        //shop :D
     }
 
-    // Update is called once per frame
-    void Update()
+    IEnumerator PlayText(string dialougeText)
     {
-        
+        for (int i = 0; i < dialougeText.Length + 1; i++)
+        {
+            string newText = dialougeText.Substring(0, i);
+            text.text = newText;
+            yield return new WaitForSecondsRealtime(time);
+        }
+        yield return null;
     }
 }
