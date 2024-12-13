@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -6,7 +7,7 @@ public class Shop : MonoBehaviour
     [SerializeField] bool playerIsIn;
     private PlayerInputs playerActions;
 
-    private void Start()
+    private void Awake()
     {
         playerActions = new PlayerInputs();
     }
@@ -29,21 +30,32 @@ public class Shop : MonoBehaviour
 
     private void OnEnable()
     {
-        playerActions.Player.Jump.started += Shopping;
+        playerActions.Player.Interact.started += Shopping;
         playerActions.Player.Enable();
     }
 
     private void OnDisable()
     {
-        playerActions.Player.Jump.started -= Shopping;
+        playerActions.Player.Interact.started -= Shopping;
         playerActions.Player.Disable();
     }
 
-    private void Shopping(InputAction.CallbackContext obj)
+    private void Shopping(InputAction.CallbackContext context)
     {
         if (playerIsIn)
         {
             Debug.Log("Shopping");
+            //Start shop
+            if (Time.timeScale == 1)
+            {
+                //call pause in another script??
+                Time.timeScale = 0;
+            }
+            else if (Time.timeScale == 0)
+            {
+                //call play in another script??
+                Time.timeScale = 1;
+            }
         }
     }
 }
