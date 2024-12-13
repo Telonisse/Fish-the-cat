@@ -895,6 +895,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: DayNightCycle
       objectReference: {fileID: 0}
+    - target: {fileID: 3821404568561213814, guid: a751a72626ac3e049bd30d23dbfc647e, type: 3}
+      propertyPath: newDay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821404568561213814, guid: a751a72626ac3e049bd30d23dbfc647e, type: 3}
+      propertyPath: timeOfDay
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821404568561213814, guid: a751a72626ac3e049bd30d23dbfc647e, type: 3}
+      propertyPath: timeSpeed
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3821404568561213814, guid: a751a72626ac3e049bd30d23dbfc647e, type: 3}
+      propertyPath: directionalLight
+      value: 
+      objectReference: {fileID: 1759120842}
     - target: {fileID: 8366041224191818767, guid: a751a72626ac3e049bd30d23dbfc647e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -1006,9 +1022,9 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 1759120843}
+  - {fileID: 366923542}
+  - {fileID: 1804201337}
   - {fileID: 9064496038014256419}
   - {fileID: 6921753009781467383}
   - {fileID: 60811419}
   - {fileID: 735032479}
-  - {fileID: 366923542}
-  - {fileID: 1804201337}

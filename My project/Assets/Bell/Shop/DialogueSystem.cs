@@ -12,7 +12,6 @@ public class DialogueSystem : MonoBehaviour
     {
         textObject.SetActive(true);
         StartCoroutine(PlayText(dialougeText));
-        //shop :D
     }
 
     IEnumerator PlayText(string dialougeText)
