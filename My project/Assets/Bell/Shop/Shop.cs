@@ -7,9 +7,15 @@ public class Shop : MonoBehaviour
     [SerializeField] bool playerIsIn;
     private PlayerInputs playerActions;
     [SerializeField] string shopText;
+    private PauseMenu pauseMenu;
+    [SerializeField] GameObject shopMenu;
+    private DialogueSystem dialogueSystem;
+
     private void Awake()
     {
         playerActions = new PlayerInputs();
+        pauseMenu = FindFirstObjectByType<PauseMenu>();
+        dialogueSystem = FindFirstObjectByType<DialogueSystem>();
     }
 
     private void OnTriggerEnter(Collider other)
@@ -31,12 +37,14 @@ public class Shop : MonoBehaviour
     private void OnEnable()
     {
         playerActions.Player.Interact.started += Shopping;
+        playerActions.Player.Fish.started += ShowShopping;
         playerActions.Player.Enable();
     }
 
     private void OnDisable()
     {
         playerActions.Player.Interact.started -= Shopping;
+        playerActions.Player.Fish.started -= ShowShopping;
         playerActions.Player.Disable();
     }
 
@@ -46,17 +54,26 @@ public class Shop : MonoBehaviour
         {
             Debug.Log("Shopping");
             //Start shop
-            if (Time.timeScale == 1)
+            if (pauseMenu.IsPaused() == false)
             {
-                //call pause in another script??
-                //Time.timeScale = 0;
-                FindFirstObjectByType<DialogueSystem>().StartText(shopText);
+                pauseMenu.PauseGame();
+                dialogueSystem.StartText(shopText);
             }
-            else if (Time.timeScale == 0)
+            else if (pauseMenu.IsPaused() == true)
             {
-                //call play in another script??
-                //Time.timeScale = 1;
+                pauseMenu.PauseGame();
+                shopMenu.SetActive(false);
+                dialogueSystem.StopText();
             }
+        }
+    }
+
+    private void ShowShopping(InputAction.CallbackContext context)
+    {
+        if (shopMenu.activeSelf == false && playerIsIn && pauseMenu.IsPaused() == true && dialogueSystem.IsTextDone() == true)
+        {
+            dialogueSystem.StopText();
+            shopMenu.SetActive(true);
         }
     }
 }

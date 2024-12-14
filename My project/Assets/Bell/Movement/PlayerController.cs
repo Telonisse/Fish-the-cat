@@ -19,34 +19,40 @@ public class PlayerController : MonoBehaviour
 
     private Animator animator;
 
+    private PauseMenu pauseMenu;
+
     private void Awake()
     {
         animator = this.GetComponentInChildren<Animator>();
         rb = GetComponent<Rigidbody>();
         playerActions = new PlayerInputs();
+        pauseMenu = FindFirstObjectByType<PauseMenu>();
     }
 
     private void FixedUpdate()
     {
-        forceDir += move.ReadValue<Vector2>().x * GetCameraRight(cam) * movementForce;
-        forceDir += move.ReadValue<Vector2>().y * GetCameraForward(cam) * movementForce;
-
-        rb.AddForce(forceDir, ForceMode.Impulse);
-        forceDir = Vector3.zero;
-
-        if (rb.linearVelocity.y < 0f)
+        if (pauseMenu.IsPaused() == false)
         {
-            rb.linearVelocity -= Vector3.down * Physics.gravity.y * Time.fixedDeltaTime;
-        }
+            forceDir += move.ReadValue<Vector2>().x * GetCameraRight(cam) * movementForce;
+            forceDir += move.ReadValue<Vector2>().y * GetCameraForward(cam) * movementForce;
 
-        Vector3 horizontalVelocity = rb.linearVelocity;
-        horizontalVelocity.y = 0;
-        if (horizontalVelocity.sqrMagnitude > maxSpeed * maxSpeed)
-        {
-            rb.linearVelocity = horizontalVelocity.normalized * maxSpeed + Vector3.up * rb.linearVelocity.y;
-        }
+            rb.AddForce(forceDir, ForceMode.Impulse);
+            forceDir = Vector3.zero;
 
-        LookAt();
+            if (rb.linearVelocity.y < 0f)
+            {
+                rb.linearVelocity -= Vector3.down * Physics.gravity.y * Time.fixedDeltaTime;
+            }
+
+            Vector3 horizontalVelocity = rb.linearVelocity;
+            horizontalVelocity.y = 0;
+            if (horizontalVelocity.sqrMagnitude > maxSpeed * maxSpeed)
+            {
+                rb.linearVelocity = horizontalVelocity.normalized * maxSpeed + Vector3.up * rb.linearVelocity.y;
+            }
+
+            LookAt();
+        }
     }
 
     private void Update()
@@ -98,7 +104,7 @@ public class PlayerController : MonoBehaviour
 
     private void Jump(InputAction.CallbackContext obj)
     {
-        if (grounded)
+        if (grounded && pauseMenu.IsPaused() == false)
         {
             animator.SetTrigger("Jump");
             forceDir += Vector3.up * jumpForce;
